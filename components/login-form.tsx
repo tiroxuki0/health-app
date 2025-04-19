@@ -21,13 +21,17 @@ export function LoginForm() {
     setErrorMessage("")
 
     try {
-      const success = await login(email, password, () => {
-        router.push(callbackUrl)
-        router.refresh()
-      })
+      const success = await login(email, password)
 
       if (success) {
         console.log("Login successful, redirecting to:", callbackUrl)
+
+        // Cho phép cookie được thiết lập trước khi chuyển hướng
+        setTimeout(() => {
+          // Sử dụng window.location để refresh toàn bộ trang thay vì router.push
+          // Điều này đảm bảo trạng thái auth được cập nhật đầy đủ
+          window.location.href = callbackUrl
+        }, 300) // Thêm độ trễ để đảm bảo cookie được thiết lập
       } else {
         setErrorMessage("Login failed: No success response")
       }
