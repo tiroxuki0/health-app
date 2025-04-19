@@ -69,7 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       await setUser(data.user)
-      callbackURL()
+
+      setTimeout(() => {
+        callbackURL()
+      }, 500)
       return true // Return true to indicate success
     } catch (error) {
       setError((error as Error).message)
