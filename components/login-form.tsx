@@ -28,7 +28,7 @@ export function LoginForm() {
         setTimeout(() => {
           router.push(callbackUrl)
           router.refresh()
-        }, 500)
+        }, 1000)
       } else {
         setErrorMessage("Login failed: No success response")
       }
