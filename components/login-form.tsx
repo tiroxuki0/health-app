@@ -21,10 +21,20 @@ export function LoginForm() {
     setErrorMessage("")
 
     try {
-      await login(email, password)
-      // If login is successful, redirect to the callback URL
-      router.push(callbackUrl)
+      const success = await login(email, password)
+
+      if (success) {
+        console.log("Login successful, redirecting to:", callbackUrl)
+        // Đảm bảo chuyển hướng diễn ra sau khi login thành công
+        setTimeout(() => {
+          router.push(callbackUrl)
+          router.refresh() // Cập nhật trạng thái người dùng trong bộ nhớ cache của router
+        }, 100)
+      } else {
+        setErrorMessage("Login failed: No success response")
+      }
     } catch (error) {
+      console.error("Login error:", error)
       setErrorMessage((error as Error).message || "ログインに失敗しました")
     }
   }
