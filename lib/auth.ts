@@ -15,7 +15,7 @@ interface AuthContextType {
   user: User | null
   loading: boolean
   error: string | null
-  login: (email: string, password: string) => Promise<boolean>
+  login: (email: string, password: string, callbackURL?: any) => Promise<boolean>
   logout: () => Promise<void>
 }
 
@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   // Login function
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email: string, password: string, callbackURL?: any): Promise<boolean> => {
     setLoading(true)
     setError(null)
 
@@ -68,7 +68,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error(data.error || "ログインに失敗しました")
       }
 
-      setUser(data.user)
+      await setUser(data.user)
+      callbackURL()
       return true // Return true to indicate success
     } catch (error) {
       setError((error as Error).message)

@@ -21,14 +21,13 @@ export function LoginForm() {
     setErrorMessage("")
 
     try {
-      const success = await login(email, password)
+      const success = await login(email, password, () => {
+        router.push(callbackUrl)
+        router.refresh()
+      })
 
       if (success) {
         console.log("Login successful, redirecting to:", callbackUrl)
-        setTimeout(() => {
-          router.push(callbackUrl)
-          router.refresh()
-        }, 1000)
       } else {
         setErrorMessage("Login failed: No success response")
       }
