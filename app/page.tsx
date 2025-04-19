@@ -6,11 +6,9 @@ import AchievementRateHero from "@/components/achievement-rate-hero"
 import HexagonMenu from "@/components/hexagon-menu"
 import { Suspense } from "react"
 
-// Force dynamic rendering for this page to avoid prerendering issues
 export const dynamic = "force-dynamic"
 
 export default async function Home() {
-  // Fetch initial data from API with error handling
   let dashboardData
   let mealsResponse
 
@@ -18,7 +16,6 @@ export default async function Home() {
     dashboardData = await fetchDashboardData()
   } catch (error) {
     console.error("Error fetching dashboard data:", error)
-    // Provide fallback data
     dashboardData = {
       achievementRate: 0,
       bodyWeight: []
@@ -29,7 +26,6 @@ export default async function Home() {
     mealsResponse = await fetchMeals({ limit: 8 })
   } catch (error) {
     console.error("Error fetching meals:", error)
-    // Provide fallback data
     mealsResponse = {
       data: [],
       pagination: { page: 1, limit: 8, totalItems: 0, totalPages: 0, hasMore: false }

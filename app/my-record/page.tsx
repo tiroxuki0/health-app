@@ -4,9 +4,7 @@ import { fetchDashboardData, fetchDiaries, fetchExercises } from "@/lib/api-clie
 import DiaryList from "@/components/diary-list"
 import { Container } from "@/components/container"
 import RecordCategoryButtons from "@/components/record-category-buttons"
-import { Suspense } from "react"
 
-// Force dynamic rendering for this page to avoid prerendering issues
 export const dynamic = "force-dynamic"
 
 export default async function MyRecord() {

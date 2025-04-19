@@ -4,16 +4,14 @@ import ColumnList from "@/components/column-list"
 import { Container } from "@/components/container"
 import { Suspense } from "react"
 
-export const dynamic = "force-dynamic" // Force dynamic rendering for this page
+export const dynamic = "force-dynamic"
 
 export default async function Column() {
-  // Fetch initial data from API with error handling
   let columnsResponse
   try {
     columnsResponse = await fetchColumns({ limit: 8 })
   } catch (error) {
     console.error("Error in Column page:", error)
-    // Provide fallback data structure in case of error
     columnsResponse = {
       data: [],
       pagination: { page: 1, limit: 8, totalItems: 0, totalPages: 0, hasMore: false }

@@ -4,7 +4,6 @@ import { Container } from "@/components/container"
 import { Suspense } from "react"
 import { ClientRouteWrapper } from "@/components/client-route-wrapper"
 
-// Server component
 function NotFoundContent() {
   return (
     <Container>
