@@ -4,6 +4,9 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 
+const loadedImagesCache: Record<string, boolean> = {}
+let hasInitiallyLoaded = false
+
 interface CategoryButtonProps {
   title: string
   subtitle: string
@@ -16,29 +19,31 @@ interface RecordCategoryButtonsProps {
 }
 
 export default function RecordCategoryButtons({ categories }: RecordCategoryButtonsProps) {
-  const [isLoading, setIsLoading] = useState(true)
-  const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({})
+  const [isLoading, setIsLoading] = useState(!hasInitiallyLoaded)
+  const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>(loadedImagesCache)
   const [isMounted, setIsMounted] = useState(false)
 
-  // Mark component as mounted after hydration
   useEffect(() => {
     setIsMounted(true)
 
-    // Simulate loading for demo purposes - only run on client
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 500)
+    if (!hasInitiallyLoaded) {
+      const timer = setTimeout(() => {
+        setIsLoading(false)
+        hasInitiallyLoaded = true
+      }, 500)
 
-    return () => clearTimeout(timer)
+      return () => clearTimeout(timer)
+    }
   }, [])
 
-  // Track loaded images - only initialize on client
   useEffect(() => {
     if (!isMounted) return
 
-    const initialLoadState: Record<string, boolean> = {}
+    const initialLoadState: Record<string, boolean> = { ...loadedImagesCache }
     categories.forEach((category, index) => {
-      initialLoadState[index] = false
+      if (initialLoadState[index] === undefined) {
+        initialLoadState[index] = false
+      }
     })
     setImagesLoaded(initialLoadState)
   }, [categories, isMounted])
@@ -46,6 +51,7 @@ export default function RecordCategoryButtons({ categories }: RecordCategoryButt
   const handleImageLoad = (index: number) => {
     if (!isMounted) return
 
+    loadedImagesCache[index] = true
     setImagesLoaded((prev) => ({
       ...prev,
       [index]: true
@@ -56,7 +62,6 @@ export default function RecordCategoryButtons({ categories }: RecordCategoryButt
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
       {/* Show skeleton state only on client-side after hydration */}
       {isMounted && isLoading ? (
-        // Skeleton UI
         <>
           {[0, 1, 2].map((index) => (
             <div key={index} className="relative overflow-hidden h-[288px] bg-gray-800 animate-pulse">
@@ -68,11 +73,9 @@ export default function RecordCategoryButtons({ categories }: RecordCategoryButt
           ))}
         </>
       ) : (
-        // Actual content
         <>
           {categories.map((category, index) => (
             <Link href={category.href} key={index} className="relative overflow-hidden h-[288px] transition-transform hover:scale-[1.02] duration-300 bg-[#FFCC21] p-[24px]">
-              {/* Show skeleton while image loads - only on client side */}
               {isMounted && !imagesLoaded[index] && <div className="absolute inset-0 bg-gray-800 animate-pulse"></div>}
 
               <Image
@@ -80,14 +83,9 @@ export default function RecordCategoryButtons({ categories }: RecordCategoryButt
                 alt={category.title}
                 width={288}
                 height={288}
-                className={`w-full h-full object-cover brightness-50 ${
-                  // Apply transition only after hydration
-                  isMounted ? `transition-opacity duration-300 ${imagesLoaded[index] ? "opacity-100" : "opacity-0"}` : "opacity-100"
-                }`}
+                className={`w-full h-full object-cover brightness-50 ${isMounted ? `transition-opacity duration-300 ${imagesLoaded[index] ? "opacity-100" : "opacity-0"}` : "opacity-100"}`}
                 onLoad={() => handleImageLoad(index)}
-                // Prevent browser extensions from adding data attributes
                 data-no-image-search="true"
-                // Static priority rendering for server
                 priority={!isMounted}
               />
 

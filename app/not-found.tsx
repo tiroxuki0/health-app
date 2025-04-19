@@ -1,10 +1,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Container } from "@/components/container"
-import { Suspense } from "react"
-import { ClientRouteWrapper } from "@/components/client-route-wrapper"
 
-function NotFoundContent() {
+export default function NotFoundContent() {
   return (
     <Container>
       <div className="min-h-[70vh] flex flex-col items-center justify-center py-12">
@@ -24,17 +22,5 @@ function NotFoundContent() {
         </div>
       </div>
     </Container>
-  )
-}
-
-export default function NotFound() {
-  return (
-    <>
-      <NotFoundContent />
-      {/* ClientRouteWrapper contains all components that use useSearchParams() with proper Suspense boundaries */}
-      <Suspense fallback={null}>
-        <ClientRouteWrapper />
-      </Suspense>
-    </>
   )
 }

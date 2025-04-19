@@ -25,11 +25,10 @@ export function LoginForm() {
 
       if (success) {
         console.log("Login successful, redirecting to:", callbackUrl)
-        // Đảm bảo chuyển hướng diễn ra sau khi login thành công
         setTimeout(() => {
           router.push(callbackUrl)
-          router.refresh() // Cập nhật trạng thái người dùng trong bộ nhớ cache của router
-        }, 100)
+          router.refresh()
+        }, 500)
       } else {
         setErrorMessage("Login failed: No success response")
       }

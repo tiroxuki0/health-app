@@ -4,9 +4,7 @@ import "./globals.css"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { AuthProvider } from "@/lib/auth"
-import { NavigationEvents } from "@/components/navigation-events"
-import RouteLoadingIndicator from "@/components/route-loading-indicator"
-import { Suspense } from "react"
+import ProcessBar from "@/components/process-bar"
 
 export const metadata: Metadata = {
   title: "HealthApp",
@@ -31,13 +29,10 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         <AuthProvider>
+          <ProcessBar />
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />
-          <Suspense>
-            <RouteLoadingIndicator />
-            <NavigationEvents />
-          </Suspense>
         </AuthProvider>
       </body>
     </html>
