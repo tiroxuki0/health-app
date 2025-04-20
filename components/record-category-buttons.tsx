@@ -83,7 +83,7 @@ export default function RecordCategoryButtons({ categories }: RecordCategoryButt
                 alt={category.title}
                 width={288}
                 height={288}
-                className={`w-full h-full object-cover brightness-50 ${isMounted ? `transition-opacity duration-300 ${imagesLoaded[index] ? "opacity-100" : "opacity-0"}` : "opacity-100"}`}
+                className={`w-full h-full object-cover brightness-50 grayscale ${isMounted ? `transition-opacity duration-300 ${imagesLoaded[index] ? "opacity-100" : "opacity-0"}` : "opacity-100"}`}
                 onLoad={() => handleImageLoad(index)}
                 data-no-image-search="true"
                 priority={!isMounted}
